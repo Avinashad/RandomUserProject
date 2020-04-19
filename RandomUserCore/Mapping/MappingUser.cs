@@ -10,7 +10,7 @@ namespace RandomUserCore.Mapping
         public MappingUser()
         {
             CreateMap<User, UserEntity>();
-            CreateMap<UserEntity, User>();
+            CreateMap<UserEntity, User>().ForMember(d => d.ImageDetail, m => m.NullSubstitute( new ImageDetailEntity()));
 
             CreateMap<ImageDetail, ImageDetailEntity>();
             CreateMap<ImageDetailEntity, ImageDetail>();

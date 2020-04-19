@@ -9,9 +9,10 @@ namespace RandomUserCore.Services
     public interface IUserService
     {
         Task<ReadOnlyListResult<User>> GetUsersList(Pagination pagination, string search = null);
-        Task CreateUser(User user);
-        Task UpdateUser(User user);
-        Task DeleteUser(Guid userId);
-        Task CreateRandomUser();
+        Task<User> CreateUser(User user);
+        Task<User> UpdateUser(User user);
+        Task<bool> DeleteUser(Guid userId);
+        Task<bool> CreateRandomUsers();
+        Task<User> GetUserById(Guid userId);
     }
 }

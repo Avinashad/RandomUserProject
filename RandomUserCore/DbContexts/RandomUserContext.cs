@@ -39,7 +39,7 @@ namespace RandomUserCore.Models
               entity.HasOne(e => e.ImageDetail)
                                .WithOne(e => e.User)
                                .HasForeignKey<ImageDetailEntity>(e => e.UserId)
-                               .OnDelete(DeleteBehavior.ClientSetNull)
+                               .OnDelete(DeleteBehavior.Cascade)
                                .HasConstraintName("FK_Image_User")
                                .IsRequired(false);
 

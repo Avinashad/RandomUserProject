@@ -28,73 +28,83 @@ namespace RandomUserCore.Services
             _externalApiService = externalApiService;
         }
 
-        public async Task<ReadOnlyListResult<User>> GetUsersList(Pagination pagination, string search = null)
+        public async Task<ReadOnlyListResult<User>> GetUsersList(Pagination pagination = null, string search = null)
         {
+            if (pagination == null) pagination = new Pagination { Limit = 20, Skip = 0 };
             var userList = await _userRepository.GetUserListBySearchValue(pagination, search);
             var users = _mapper.Map<List<User>>(userList.ToList());
             return new ReadOnlyListResult<User>(users, users.Count, pagination.Skip, pagination.Limit);
         }
 
-        public async Task CreateUser(User user)
+        public async Task<User> CreateUser(User user)
         {
             try
             {
-                //In case where you want to avoid multiple call to the DB
-                using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-                {
+                var userEntity = await _userRepository.Create(_mapper.Map<UserEntity>(user));
+                return _mapper.Map<User>(userEntity);
 
-                    var userEntity = _mapper.Map<UserEntity>(user);
-                    var createdUser = await _userRepository.Create(userEntity);
-
-                    scope.Complete();
-                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to create the user");
-                throw;
+                return null;
             }
         }
 
-        public async Task UpdateUser(User user)
+        public async Task<User> UpdateUser(User user)
         {
             try
             {
                 var userEntity = _mapper.Map<UserEntity>(user);
-                await _userRepository.Update(userEntity);
+              var updatedUser =  await _userRepository.Update(userEntity);
+                return _mapper.Map<User>(updatedUser);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to update the user");
-                throw;
+                return null;
             }
         }
 
-        public async Task DeleteUser(Guid userId)
+        public async Task<bool> DeleteUser(Guid userId)
         {
             try
             {
-                await _userRepository.Delete(userId);
+                return await _userRepository.Delete(userId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to Delete the user");
-                throw;
+                return false;
             }
         }
 
-        public async Task CreateRandomUser()
+        public async Task<bool> CreateRandomUsers()
         {
             try
             {
                 var userEntityList = await _externalApiService.GetRandomUsers();
-                await _userRepository.BulkInsert(userEntityList);
+                return await _userRepository.BulkInsert(userEntityList);
             }
             catch (Exception ex)
             {
-
                 _logger.LogError(ex, "Failed to bulk insert user");
-                throw;
+                return false;
+            }
+        }
+
+        public async Task<User> GetUserById(Guid userId)
+        {
+            try
+            {
+                var user = await _userRepository.GetUserById(userId);
+                if (user == null) return null;
+                return _mapper.Map<User>(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "No User Available");
+                return null;
             }
         }
     }

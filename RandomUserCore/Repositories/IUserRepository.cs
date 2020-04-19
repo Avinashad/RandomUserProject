@@ -9,9 +9,10 @@ namespace RandomUserCore.Repositories
     public interface IUserRepository
     {
         Task<UserEntity> Create(UserEntity entity);
-        Task Update(UserEntity entity);
+        Task<UserEntity> Update(UserEntity entity);
         Task<IEnumerable<UserEntity>> GetUserListBySearchValue(Pagination pagination, string search = null);
-        Task Delete(Guid userId);
-        Task BulkInsert(IEnumerable<UserEntity> userEntityList);
+        Task<bool> Delete(Guid userId);
+        Task<bool> BulkInsert(IEnumerable<UserEntity> userEntityList);
+        Task<UserEntity> GetUserById(Guid userId);
     }
 }
