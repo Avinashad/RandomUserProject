@@ -12,11 +12,11 @@ Instructions to run the project:
 2. run database migration.
 3. use the command dotnet run
 4. Useful url
-    Get All User - api/user/get-user-list
-    Get All User With Matching Condition- api/user/get-user-list?limit=20&skip=0&search=avi
-    Get User By user Id - api/user/{userId}
-    Create User - api/user/
--------------------------------------------------------------------------------------------------------
+```
+Get All User - api/user/get-user-list  .
+Get All User With Matching Condition- api/user/get-user-list?limit=20&skip=0&search=avi  .
+Get User By user Id - api/user/{userId}
+Create User - api/user/
                   body:
                   {
                       "title": "Ms",
@@ -30,9 +30,9 @@ Instructions to run the project:
                           "thumbnail": "https://randomuser.me/api/portraits/thumb/women/41.jpg",
                          }
                    }
---------------------------------------------------------------------------------------------------------
-    Update User - api/user/update/{userId}
-    Delete User - api/user/{userId}
-    Use RandomUser endpoint to populate database -api/user/create-random-user
+Update User - api/user/update/{userId}
+Delete User - api/user/{userId}
+Use RandomUser endpoint to populate database -api/user/create-random-user
+```
     
 
